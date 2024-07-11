@@ -4,7 +4,7 @@ import { View, Text} from 'react-native';
 const Splash = ({ navigation }) => {
     useEffect(() => {
         setTimeout(() => {
-            navigation.replace('SignupPage') //임시로 signup으로 이동
+            navigation.replace('MainTab');
         }, 2000)
     }, [])
 
