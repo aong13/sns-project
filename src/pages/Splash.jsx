@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text} from 'react-native';
 
 const Splash = ({ navigation }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    
     useEffect(() => {
         setTimeout(() => {
-            navigation.replace('MainTab')
+            navigation.replace('SignupPage') //임시로 signup으로 이동
         }, 2000)
     }, [])
 
