@@ -5,8 +5,8 @@
 2. 하위에 프로젝트 파일을 생성하고 진행합니다.
 3. 완료한 파일을 commit, push합니다.
 4. 해당 브랜치에서 Pull Request를 생성합니다.
-5. PR제목은 프로젝트1_Vido Editor_팀명_이름으로 통일해주세요.
-- eg.g project1/Vido Editor/team1/오스틴
+5. PR제목은 프로젝트1_오운완 앱 만들기_팀명_이름으로 통일해주세요.
+- eg.g project1/오운완 앱 만들기/team1/오스틴
 6. label을 적극적으로 활용해주세요.
 
 ---
