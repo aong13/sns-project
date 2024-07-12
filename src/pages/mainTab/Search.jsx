@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, FlatList, useWindowDimensions } from 'react-native';
 import { getSearchTag } from '../../apis/Feed'
 import { baseURL } from '../../apis/index'
-const searchIcon = require('../../assets/icons/search.png');
+
+const hashTagIcon = require('../../assets/icons/hashtag.png');
 const multiPhoto = require('../../assets/icons/multi.png');
 
 const Search = ({ navigation }) => {
@@ -43,8 +44,8 @@ const Search = ({ navigation }) => {
                     <TouchableOpacity 
                         onPress={() => navigation.navigate('SearchList')}
                         style={styles.searchWrapper}>
-                        <TouchableOpacity style={styles.searchIconStyle}>
-                            <Image source={searchIcon} style={{ width: 24, height: 24 }} />
+                        <TouchableOpacity style={styles.hashTagIconStyle}>
+                            <Image source={hashTagIcon} style={{ width: 24, height: 24 }} />
                         </TouchableOpacity>
                         <Text
                             allowFontScaling={false}
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
         marginVertical: 12,
         borderRadius: 4
     },
-    searchIconStyle: {
+    hashTagIconStyle: {
         marginLeft: 16,
         marginRight: 2
     },
