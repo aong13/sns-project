@@ -1,5 +1,5 @@
 import React from 'react'
-import {Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -12,10 +12,11 @@ const back_icon = require('../assets/icons/back.png');
 
 const emotion_icon = require('../assets/icons/expression-outline.png');
 const image_icon = require('../assets/icons/image_upload.png');
-const comment_icon = require('../assets/icons/comment_mini.png');
 
-const heart_icon = require('../assets/icons/comment-heart-fill.png');
-const heart_fill_icon = require('../assets/icons/comment-heart-outline.png');
+const comment_icon = require('../assets/icons/comment.png');
+
+const heart_fill_icon = require('../assets/icons/comment-heart-fill.png');
+const heart_icon = require('../assets/icons/comment-heart-outline.png');
 
 const angry_icon = require('../assets/icons/emotion_angry.png');
 const funny_icon = require('../assets/icons/emotion_funny.png');
@@ -88,18 +89,11 @@ const FeedDetail = ({ route, navigation }) => {
         />
     );
 
-    const HashTagComponent = ({ hashTag }) => (
-        <TouchableOpacity style={styles.hashTagWrapper}>
-            <Text style={styles.hashTagText}>#{hashTag}</Text>
-        </TouchableOpacity>
-    );
-
     const handleLikePress = () => {
 
     }
   return (
     <SafeAreaView style={{flex:1, backgroundColor:'#FFF'}}>
-        <View style={{ flex: 1 }}>
             <View style={styles.headerWrapper}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={back_icon} style={styles.headerIcon} />
@@ -114,6 +108,8 @@ const FeedDetail = ({ route, navigation }) => {
                 </View>
             </View>
             
+        <ScrollView>
+        <View style={{ flex: 1 }}>
             <View style={styles.postHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                     <TouchableOpacity>
@@ -134,69 +130,90 @@ const FeedDetail = ({ route, navigation }) => {
                 style={styles.thumbnailImg}
                 resizeMode='contain' />
 
-            <View style={{ marginHorizontal: 20, marginVertical: 16, gap: 10}}>
+            <View style={styles.contentContainer}>
                 <Text styles={styles.timeText}> 30분 전 </Text>
                 <Text style={styles.contentsText}>{dummy_feed.contents}</Text>
                 
-            <View style={styles.hashTagContainer}>
-                {dummy_feed.hashTags.map((hashTag, index) => (
-                    <HashTagComponent key={index} hashTag={hashTag} />
-                ))}
+                <View style={styles.hashTagContainer}>
+                    {dummy_feed.hashTags.map((hashTag, index) => (
+                        <HashTagComponent key={index} hashTag={hashTag} />
+                    ))}
+                </View>
             </View>
 
-        </View>
-
             <View style={styles.reactionsContainer}>
-                <TouchableOpacity
-                    style={{flexDirection: 'row', gap: 8, alignItems:'center'}}
-                    onPress={() => handleLikePress()}>
-                    <Image source={emotion_icon} style={{ width: 16, height: 16 }} />
-                    <Text>표현하기</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{flexDirection: 'row', gap: 8, alignItems:'center'}}>
-                    <Image source={comment_icon} style={{ width: 16, height: 16 }} />
-                    <Text>{`댓글 ${commentNum=16}`}</Text>
-                </TouchableOpacity>
+                <ReactionButton
+                    onPress={handleLikePress()}
+                    text="표현하기"
+                    img={emotion_icon}/>
+                <ReactionButton
+                    text="댓글"
+                    img={comment_icon}/>
             </View>
 
             <FlatList
-            data={dummyComment}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
+                data={dummyComment}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
             />
         </View>
+        </ScrollView>
     </SafeAreaView>
   );
 }
 
-const CommentComponent = ({profileImg, nickname, comment, likeNum, replyNum, date}) =>{
-    <View style={styles.commentContainer}>
-        <View style={styles.authorInfoWrapper}>
-            <TouchableOpacity>
-                <Image source={{ uri: profileImg}} style={{ width: 30, height: 30 }} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Text style={{ fontSize: 13, fontWeight: 'bold', lineHeight: 19.97 }}>{nickname}</Text>
-            </TouchableOpacity>
-            <Text style={{ fontSize: 13, fontWeight: 'bold', lineHeight: 19.97 }}>{date}</Text>
-        </View>
-            <Text style={styles.commentText}>{comment}</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <TouchableOpacity>
-                    <Image source={heart_icon} style={{ width: 24, height: 24 }} />
-                </TouchableOpacity>
-                <Text>{likeNum}</Text>
-                <TouchableOpacity>
-                    <Image source={comment_icon} style={{ width: 24, height: 24 }} />
-                </TouchableOpacity>
-                <Text>{replyNum}</Text>
+const HashTagComponent = ({ hashTag }) => (
+    <TouchableOpacity style={styles.hashTagWrapper}>
+        <Text style={styles.hashTagText}>#{hashTag}</Text>
+    </TouchableOpacity>
+);
+
+const ReactionButton = ({ onPress, text, img }) => (
+    <TouchableOpacity
+        style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}
+        onPress={onPress}>
+        <Image source={img} style={{ width: 16, height: 16 }} />
+        <Text>{text}</Text>
+    </TouchableOpacity>
+);
+
+const CommentComponent = ({ profileImg, nickname, comment, likeNum, replyNum, date }) => {
+    return (
+        <View style={styles.cmnt_Container}>
+            <View style={styles.authorInfoWrapper}>
+                <View style={{flexDirection: 'row', gap:10, alignItems: 'center'}}>
+                    <TouchableOpacity >
+                            <Image source={{ uri: profileImg }} style={{ width: 28, height: 28, borderRadius: 15 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.cmnt_Author}>{nickname}</Text>
+                    </TouchableOpacity>
+                </View>
+                <Text style={styles.cmnt_Date}>{date}</Text>
             </View>
-            <Text>신고</Text>
+            <Text style={styles.cmnt_Text}>{comment}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                    <View style={styles.cmnt_ReactionWrapper}>
+                        <TouchableOpacity>
+                            <Image source={heart_icon} style={{ width: 18, height: 18 }} />
+                        </TouchableOpacity>
+                        <Text>{likeNum}</Text>
+                    </View>
+                    <View style={styles.cmnt_ReactionWrapper}>
+                        <TouchableOpacity>  
+                            <Image source={comment_icon} style={{ width: 18, height: 18 }} />
+                        </TouchableOpacity>
+                        <Text>{replyNum}</Text>
+                    </View>
+                </View>
+                <TouchableOpacity>
+                    <Text>신고</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-    </View>
-}
+    );
+};
 
 const styles = StyleSheet.create({
     //헤더
@@ -242,7 +259,7 @@ const styles = StyleSheet.create({
     //컨텐츠영역
     contentContainer:{
         marginHorizontal: 20,
-        marginVertical: 16, 
+        marginVertical: 20, 
         gap: 10
     },
         timeText: {
@@ -281,20 +298,46 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 14,
         alignItems: 'center', 
-        paddingHorizontal: 16, 
-        paddingVertical: 8,
+        paddingHorizontal: 24, 
+        paddingVertical: 16,
+        borderTopWidth:0.2,
         borderBottomWidth:0.2,
-        borderBottomColor:'#d0d0d0',
+        borderColor:'#d0d0d0',
     },
 
     //댓글
-    commentContainer : {
-        marginHorizontal: 16
+    cmnt_Container : {
+        paddingHorizontal: 16,
+        paddingVertical: 20,
+        borderBottomWidth:0.2,
+        borderColor:'#d0d0d0',
     },
     authorInfoWrapper:{
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 4
+        gap: 10,
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    cmnt_Author:{
+        fontSize: 13,
+        lineHeight: 19.97, 
+        fontWeight: "bold",
+        color: '#7B7B7B'   
+    },
+    cmnt_Text:{
+        fontSize: 13,
+        lineHeight: 19.97, 
+        color: '#3A3A3A',   
+        marginBottom: 10,
+    },
+    cmnt_Date:{
+        fontSize: 12, 
+        lineHeight: 19.97,
+        color: '#A5A5A5',
+    },
+    cmnt_ReactionWrapper:{
+        flexDirection: 'row', alignItems: 'center', gap:4
     }
 })
 
