@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react'
-import { SafeAreaView, Text, View, FlatList } from 'react-native'
-import { getFeed } from '../apis/Feed';
-import FeedPost from '../components/FeedPost';
+import { SafeAreaView, Text, View, FlatList, TouchableOpacity, StyleSheet} from 'react-native'
+import { getFeed } from '../../apis/Feed';
+import FeedPost from '../../components/FeedPost';
+
+const { width } = Dimensions.get('window');
 
 const dummy_feed = [
     {
@@ -58,7 +60,7 @@ const dummy_feed = [
 const page = 0;
 const pageSize = 10;
 
-const Home = () =>{
+const Home = ({navigation}) =>{
     // useEffect(() => {
     //     getFeedApi(page, pageSize);
     //   }, []);
@@ -83,6 +85,15 @@ const renderFeed = ({ item, index }) => {
 
       return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
+            <View style={styles.header}>
+                <Text style={styles.headerText} >오운완</Text>
+            </View>
+            <TouchableOpacity  
+                onPress={()=>{
+                    navigation.navigate("LoginPage");
+                }}>
+                <Text> 임시 로그인 버튼 </Text>
+            </TouchableOpacity>
             <View style={{ flex: 1, backgroundColor: '#FFF', marginBottom: 32 }}>
                 <FlatList
                     data={dummy_feed}
@@ -95,5 +106,17 @@ const renderFeed = ({ item, index }) => {
 
         </SafeAreaView>
     )
+
 }
+const styles = StyleSheet.create({
+    header:{
+        height: 375,
+        width,
+        paddingLeft: 20,
+        alignItems: 'center',
+    },
+    headerText:{
+        fontWeight: 800
+    }
+})
 export default Home;
