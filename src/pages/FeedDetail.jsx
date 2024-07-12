@@ -1,5 +1,6 @@
 import React from 'react'
 import {Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
+import { CommentItem } from '../components/Comment/CommentItem';
 
 const { width } = Dimensions.get('window');
 
@@ -79,7 +80,7 @@ const FeedDetail = ({ route, navigation }) => {
     const { id } = route.params;
 
     const renderItem = ({ item }) => (
-        <CommentComponent
+        <CommentItem
             profileImg={item.profileImg}
             nickname={item.nickname}
             comment={item.comment}
@@ -176,45 +177,6 @@ const ReactionButton = ({ onPress, text, img }) => (
         <Text>{text}</Text>
     </TouchableOpacity>
 );
-
-const CommentComponent = ({ profileImg, nickname, comment, likeNum, replyNum, date }) => {
-    return (
-        <View style={styles.cmnt_Container}>
-            <View style={styles.authorInfoWrapper}>
-                <View style={{flexDirection: 'row', gap:10, alignItems: 'center'}}>
-                    <TouchableOpacity >
-                            <Image source={{ uri: profileImg }} style={{ width: 28, height: 28, borderRadius: 15 }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.cmnt_Author}>{nickname}</Text>
-                    </TouchableOpacity>
-                </View>
-                <Text style={styles.cmnt_Date}>{date}</Text>
-            </View>
-            <Text style={styles.cmnt_Text}>{comment}</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                    <View style={styles.cmnt_ReactionWrapper}>
-                        <TouchableOpacity>
-                            <Image source={heart_icon} style={{ width: 18, height: 18 }} />
-                        </TouchableOpacity>
-                        <Text>{likeNum}</Text>
-                    </View>
-                    <View style={styles.cmnt_ReactionWrapper}>
-                        <TouchableOpacity>  
-                            <Image source={comment_icon} style={{ width: 18, height: 18 }} />
-                        </TouchableOpacity>
-                        <Text>{replyNum}</Text>
-                    </View>
-                </View>
-                <TouchableOpacity>
-                    <Text>신고</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
-};
-
 const styles = StyleSheet.create({
     //헤더
     headerWrapper: {
@@ -304,41 +266,6 @@ const styles = StyleSheet.create({
         borderBottomWidth:0.2,
         borderColor:'#d0d0d0',
     },
-
-    //댓글
-    cmnt_Container : {
-        paddingHorizontal: 16,
-        paddingVertical: 20,
-        borderBottomWidth:0.2,
-        borderColor:'#d0d0d0',
-    },
-    authorInfoWrapper:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        justifyContent: 'space-between',
-        marginBottom: 10,
-    },
-    cmnt_Author:{
-        fontSize: 13,
-        lineHeight: 19.97, 
-        fontWeight: "bold",
-        color: '#7B7B7B'   
-    },
-    cmnt_Text:{
-        fontSize: 13,
-        lineHeight: 19.97, 
-        color: '#3A3A3A',   
-        marginBottom: 10,
-    },
-    cmnt_Date:{
-        fontSize: 12, 
-        lineHeight: 19.97,
-        color: '#A5A5A5',
-    },
-    cmnt_ReactionWrapper:{
-        flexDirection: 'row', alignItems: 'center', gap:4
-    }
 })
 
 
