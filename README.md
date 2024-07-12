@@ -1,79 +1,36 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+**프로젝트 제출 방법**
+1. 브랜치 네이밍 규칙에 따라 새로운 브랜치를 생성합니다.
+- 브랜치 이름 형식은 project1/팀명/이름입니다.
+- eg.g project1/team1/오스틴
+2. 하위에 프로젝트 파일을 생성하고 진행합니다.
+3. 완료한 파일을 commit, push합니다.
+4. 해당 브랜치에서 Pull Request를 생성합니다.
+5. PR제목은 프로젝트1_오운완 앱 만들기_팀명_이름으로 통일해주세요.
+- eg.g project1/오운완 앱 만들기/team1/오스틴
+6. label을 적극적으로 활용해주세요.
 
-# Getting Started
+---
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+**main에 push하지 않도록 주의해 주세요**
 
-## Step 1: Start the Metro Server
+훅 스크립트를 사용하여 로컬 환경에서 main 브랜치로의 직접 푸시를 방지할 수 있습니다.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+`.git/hooks/pre-push` 파일을 생성후 아래 내용을 작성합니다.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+```
+#!/bin/sh
 
-```bash
-# using npm
-npm start
+protected_branch="main"
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
-# OR using Yarn
-yarn start
+if [ "$current_branch" = "$protected_branch" ]; then
+  echo "Direct push to $protected_branch branch is not allowed. Please use a pull request."
+  exit 1
+fi
 ```
 
-## Step 2: Start your Application
+아래 명령어로 실행 권한을 부여합니다.
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
 ```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+chmod +x .git/hooks/pre-push
 ```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
