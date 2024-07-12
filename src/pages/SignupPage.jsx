@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { signup } from '../apis/User'; // User.js에 작성한 API 호출 함수
 
-const SignupScreen = () => {
+const SignupScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
@@ -23,10 +23,10 @@ const SignupScreen = () => {
         phoneNumber
       };
       await signUpApi(userData);
-      navigation.replace('Home')
+      navigation.replace('LoginPage');
       // 성공 모달 띄우기
     } catch (error) {
-      console.error('회원가입 실패:', error);
+      console.error('회원가입 실패함:', error);
     }
   };
 
