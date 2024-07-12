@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { SafeAreaView, Text, View, FlatList, TouchableOpacity, StyleSheet} from 'react-native'
+import { Dimensions, SafeAreaView, Text, View, FlatList, TouchableOpacity, StyleSheet} from 'react-native'
 import { getFeed } from '../../apis/Feed';
 import FeedPost from '../../components/FeedPost';
 
@@ -61,6 +61,8 @@ const page = 0;
 const pageSize = 10;
 
 const Home = ({navigation}) =>{
+
+    //API 연결
     // useEffect(() => {
     //     getFeedApi(page, pageSize);
     //   }, []);
@@ -70,53 +72,49 @@ const Home = ({navigation}) =>{
     // console.log('Received posts:', feed);
     // };
 
-const renderFeed = ({ item, index }) => {
+    const renderFeed = ({ item }) => {
+        return (
+            <FeedPost 
+                id={item.id}
+                profileImg={item.profileImg}
+                nickname={item.name}
+                likeNum={item.like}
+                commentNum={3}
+                thumbnail={item.feedImg[0]}
+                contents={item.contents}
+                navigation={navigation}  
+            />
+        );
+    };
+    
     return (
-        <FeedPost 
-         profileImg={item.profileImg}
-         nickname={item.name}
-         likeNum={item.like}
-         commentNum={3}
-         thumbnail={item.feedImg[0]}
-         contents={item.contents}/>
-    )
-}
-
-
-      return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
             <View style={styles.header}>
-                <Text style={styles.headerText} >오운완</Text>
+                <Text style={styles.headerText}>오운완</Text>
             </View>
-            <TouchableOpacity  
-                onPress={()=>{
-                    navigation.navigate("LoginPage");
-                }}>
-                <Text> 임시 로그인 버튼 </Text>
-            </TouchableOpacity>
             <View style={{ flex: 1, backgroundColor: '#FFF', marginBottom: 32 }}>
                 <FlatList
                     data={dummy_feed}
                     renderItem={renderFeed}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item.id.toString()}
                     removeClippedSubviews
                     showsVerticalScrollIndicator={false}
                 />
             </View>
-
         </SafeAreaView>
-    )
-
+    );
 }
+
 const styles = StyleSheet.create({
     header:{
-        height: 375,
+        height: 30,
         width,
-        paddingLeft: 20,
         alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor:'#e0e0e0'
     },
     headerText:{
-        fontWeight: 800
+        fontWeight: 'bold'
     }
 })
 export default Home;
