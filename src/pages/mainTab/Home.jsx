@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Dimensions, SafeAreaView, Text, View, FlatList, TouchableOpacity, StyleSheet} from 'react-native'
 import { getFeed } from '../../apis/Feed';
 import FeedPost from '../../components/FeedPost';
@@ -56,21 +56,21 @@ const dummy_feed = [
     }
 ]
 
-//pagenation
-const page = 0;
-const pageSize = 10;
-
 const Home = ({navigation}) =>{
-
-    //API 연결
-    // useEffect(() => {
-    //     getFeedApi(page, pageSize);
-    //   }, []);
-
-    // const getFeedApi = async (page, pageSize) => {
-    // const feed = await getFeed();
-    // console.log('Received posts:', feed);
-    // };
+    const [feedData, setFeedData] = useState([]);
+    //pagenation
+    const page = 0;
+    const pageSize = 10;
+  
+    const getFeedApi = async (page, pageSize) => {
+        const feed = await getFeed(page, pageSize); 
+        console.log('Received posts:', feed);
+        setFeedData(feed);
+    };
+  
+    useEffect(() => {
+        getFeedApi(page, pageSize);
+    }, [page]);
 
     const renderFeed = ({ item }) => {
         return (
@@ -86,11 +86,11 @@ const Home = ({navigation}) =>{
             />
         );
     };
-    
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>오운완</Text>
+            <View style={styles.headerWrapper}>
+                <Text style={styles.headerTitle}>오운완</Text>
             </View>
             <View style={{ flex: 1, backgroundColor: '#FFF', marginBottom: 32 }}>
                 <FlatList
@@ -106,15 +106,22 @@ const Home = ({navigation}) =>{
 }
 
 const styles = StyleSheet.create({
-    header:{
-        height: 30,
-        width,
+    headerWrapper: {
+        backgroundColor: '#FFF',
+        paddingHorizontal: 16,
+        paddingVertical: 18,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1,
-        borderBottomColor:'#e0e0e0'
+        borderBottomColor: '#EAEAEA'
     },
-    headerText:{
-        fontWeight: 'bold'
-    }
+    headerTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        lineHeight: 19.97,
+        textAlign: 'center',
+        color: '#3A3A3A'
+    },
 })
 export default Home;
