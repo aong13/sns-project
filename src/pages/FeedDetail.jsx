@@ -1,6 +1,7 @@
 import React from 'react'
 import {Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 import { CommentItem } from '../components/Comment/CommentItem';
+import HashTags from '../components/HashTags';
 
 const { width } = Dimensions.get('window');
 
@@ -135,11 +136,8 @@ const FeedDetail = ({ route, navigation }) => {
                 <Text styles={styles.timeText}> 30분 전 </Text>
                 <Text style={styles.contentsText}>{dummy_feed.contents}</Text>
                 
-                <View style={styles.hashTagContainer}>
-                    {dummy_feed.hashTags.map((hashTag, index) => (
-                        <HashTagComponent key={index} hashTag={hashTag} />
-                    ))}
-                </View>
+            <HashTags
+                tagList={dummy_feed.hashTags}/>
             </View>
 
             <View style={styles.reactionsContainer}>
@@ -162,12 +160,6 @@ const FeedDetail = ({ route, navigation }) => {
     </SafeAreaView>
   );
 }
-
-const HashTagComponent = ({ hashTag }) => (
-    <TouchableOpacity style={styles.hashTagWrapper}>
-        <Text style={styles.hashTagText}>#{hashTag}</Text>
-    </TouchableOpacity>
-);
 
 const ReactionButton = ({ onPress, text, img }) => (
     <TouchableOpacity
@@ -238,23 +230,6 @@ const styles = StyleSheet.create({
             textAlign: 'left',
             color: '#3A3A3A'   
         },
-    //해시태그
-    hashTagContainer:{
-        flexDirection: 'row', 
-        gap:6
-    },
-        hashTagWrapper:{
-            backgroundColor:'#F3F3F3',
-            padding:5,
-            borderRadius:5,
-        },
-        hashTagText:{
-            fontSize: 14,
-            lineHeight: 20.27,
-            letterSpacing: -0.03,
-            textAlign: 'left'
-        },
-
     //반응
     reactionsContainer:{
         flexDirection: 'row',
