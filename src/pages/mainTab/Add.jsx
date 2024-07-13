@@ -80,7 +80,7 @@ const Add = ({ navigation }) => {
                     <Text style={{ fontSize: 24, color: '#3A3A3A', fontWeight: 'bold' }}>X</Text>
                 </TouchableOpacity>
                 <Text style={{ fontSize: 15, color: '#3A3A3A', fontWeight: 'bold' }}>새 게시물</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('AddFeed')}>
                     <Text style={{ fontSize: 14, color: '#2F80ED', fontWeight: 'bold' }}>다음</Text>
                 </TouchableOpacity>
             </View>

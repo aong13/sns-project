@@ -5,6 +5,7 @@ const dmOff = require('../assets/icons/bottomTab/dm_off.png');
 const homeOff = require('../assets/icons/bottomTab/home_off.png');
 const mypageOff = require('../assets/icons/bottomTab/mypage_off.png');
 const searchOff = require('../assets/icons/bottomTab/search_off.png');
+const addOff = require('../assets/icons/bottomTab/modify.png');
 
 const dmOn = require('../assets/icons/bottomTab/dm_on.png');
 const homeOn = require('../assets/icons/bottomTab/home_on.png');
@@ -28,6 +29,8 @@ const CustomBottomTap = ({state, navigation, insets, descriptors}) => {
                   return bool ? searchOn : searchOff;
                 case 'Dm' :
                   return bool ? dmOn : dmOff;
+                case 'Add' :
+                  return bool ? addOff : addOff;  //아이콘이 없어서 임시시             
                 default :
                   return bool ? mypageOn : mypageOff;
 
