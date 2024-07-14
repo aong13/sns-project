@@ -9,7 +9,7 @@ export const getFeed = async (page, pageSize) => {
             pageSize,
       },
       });
-      return res.data;
+      return res.data.result;
   } catch (error) {
       console.error('피드목록 조회 실패:', error.res); 
       throw error;
@@ -47,7 +47,7 @@ export const createFeed = async (content, tags, images) => {
           type: image.type || 'image/jpeg',
     });
   });
-  console.log("formData:", formData);
+  // console.log("formData:", formData);
   try {
       const res = await API.post('/feed', formData,{
           headers:{

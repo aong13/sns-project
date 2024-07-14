@@ -1,87 +1,90 @@
-import React, {useState, useEffect} from 'react'
-import { Dimensions, SafeAreaView, Text, View, FlatList, TouchableOpacity, StyleSheet} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Dimensions, SafeAreaView, Text, View, FlatList, StyleSheet } from 'react-native'
 import { getFeed } from '../../apis/Feed';
 import FeedPost from '../../components/FeedPost';
+import { baseURL } from '../../apis/index'
+
 
 const { width } = Dimensions.get('window');
 
-const dummy_feed = [
-    {
-        id: 1,
-        name: 'Jeongtaeyoung_5812',
-        profileImg: 'https://avatar.iran.liara.run/public',
-        feedImg: [
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-        ],
-        contents: '내 마음...받아줘',
-        like: 37,
-        likeUsers: [
-            1, 2, 3,
-        ]
-    },
-    {
-        id: 2,
-        name: 'Jeongtaeyoung_5812',
-        profileImg: 'https://avatar.iran.liara.run/public',
-        feedImg: [
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-        ],
-        contents: '내 마음...받아줘',
-        like: 37,
-        likeUsers: [
-            1, 2, 3,
-        ]
-    },
-    {
-        id: 3,
-        name: 'Jeongtaeyoung_5812',
-        profileImg: 'https://avatar.iran.liara.run/public',
-        feedImg: [
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-        ],
-        contents: '하이룽룽닝닝',
-        like: 37,
-        likeUsers: [
-            1, 2, 3,
-        ]
-    }
-]
+// const dummy_feed = [
+//     {
+//         id: 1,
+//         name: 'Jeongtaeyoung_5812',
+//         profileImg: 'https://avatar.iran.liara.run/public',
+//         feedImg: [
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//         ],
+//         contents: '내 마음...받아줘',
+//         like: 37,
+//         likeUsers: [
+//             1, 2, 3,
+//         ]
+//     },
+//     {
+//         id: 2,
+//         name: 'Jeongtaeyoung_5812',
+//         profileImg: 'https://avatar.iran.liara.run/public',
+//         feedImg: [
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//         ],
+//         contents: '내 마음...받아줘',
+//         like: 37,
+//         likeUsers: [
+//             1, 2, 3,
+//         ]
+//     },
+//     {
+//         id: 3,
+//         name: 'Jeongtaeyoung_5812',
+//         profileImg: 'https://avatar.iran.liara.run/public',
+//         feedImg: [
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//         ],
+//         contents: '하이룽룽닝닝',
+//         like: 37,
+//         likeUsers: [
+//             1, 2, 3,
+//         ]
+//     }
+// ]
 
-const Home = ({navigation}) =>{
+const Home = ({ navigation }) => {
     const [feedData, setFeedData] = useState([]);
-    //pagenation
+    // Pagination
     const page = 0;
     const pageSize = 10;
-  
+
     const getFeedApi = async (page, pageSize) => {
-        const feed = await getFeed(page, pageSize); 
+        const feed = await getFeed(page, pageSize);
         console.log('Received posts:', feed);
-        setFeedData(feed);
+        setFeedData(feed.content);
     };
-  
+
     useEffect(() => {
         getFeedApi(page, pageSize);
     }, [page]);
 
     const renderFeed = ({ item }) => {
+        console.log("item:", item);
         return (
             <FeedPost 
                 id={item.id}
-                profileImg={item.profileImg}
-                nickname={item.name}
-                likeNum={item.like}
-                commentNum={3}
-                thumbnail={item.feedImg[0]}
-                contents={item.contents}
+                profileImg={baseURL+ item.images[0]} //프로필 이미지가 없음
+                nickname={item.nickname}
+                likeNum={item.like=2}
+                commentNum={item.replys.length}
+                thumbnail={baseURL+item.images[0]}
+                contents={item.content}
                 navigation={navigation}  
             />
         );
@@ -94,7 +97,7 @@ const Home = ({navigation}) =>{
             </View>
             <View style={{ flex: 1, backgroundColor: '#FFF', marginBottom: 32 }}>
                 <FlatList
-                    data={dummy_feed}
+                    data={feedData}
                     renderItem={renderFeed}
                     keyExtractor={item => item.id.toString()}
                     removeClippedSubviews
@@ -123,5 +126,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#3A3A3A'
     },
-})
+});
+
 export default Home;
