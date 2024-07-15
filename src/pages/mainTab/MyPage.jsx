@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, Image,FlatList,Dimensions,StyleSheet } from 'react-native';
 import { getProfile } from '../../apis/Account';
 import { baseURL } from '../../apis';
+import BasicHeader from '../../components/BasicHeader';
 
 const back_icon = require('../../assets/icons/back.png');
 const settingsIcon = require('../../assets/icons/setting.png');
@@ -43,20 +44,13 @@ const Mypage = ({ navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
             <View style={{ flex: 1 }}>
-                <View style={styles.headerWrapper}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={back_icon} style={styles.headerIcon} />
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 15, color: '#3A3A3A', fontWeight: 'bold' }}>마이페이지</Text>
-                    <View style={styles.headerButtonsWrapper}>
-                        <TouchableOpacity>
-                            <Image source={settingsIcon} style={styles.headerIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image source={alarmIcon} style={styles.headerIcon} /> 
-                        </TouchableOpacity>
-                    </View>
-                </View>
+            <BasicHeader
+                title="마이페이지"
+                rightButtons={[
+                    { icon: settingsIcon, onPress: () => navigation.navigate('MyInfo') },
+                    { icon: alarmIcon },
+                ]}
+            />
                 <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View>
                         <Image source={{profileImageUrl}} style={{ width: 60, height: 60, borderRadius: 30, marginBottom: 4 }} />
@@ -71,12 +65,12 @@ const Mypage = ({ navigation }) => {
                             onPress={() => navigation.navigate('FollowPage')}
                             style={{alignItems:'center', gap: 2}}>
                             <Text style={{fontSize: 12}}>{accountInfo.followerCount}</Text>
-                            <Text style={{fontSize: 13}}>팔로워</Text>
+                            <Text style={{fontSize: 13}}>팔로잉</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{alignItems:'center', gap: 2}}
                             onPress={() => navigation.navigate('FollowPage')}>
                             <Text style={{fontSize: 12}}>{accountInfo.followingCount}</Text>
-                            <Text style={{fontSize: 13}}>팔로윙</Text>
+                            <Text style={{fontSize: 13}}>팔로워</Text>
                         </TouchableOpacity>
                     </View>
 
