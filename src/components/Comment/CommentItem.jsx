@@ -4,6 +4,7 @@ import {View, Text, Image, TouchableOpacity,StyleSheet } from 'react-native';
 const comment_icon = require('../../assets/icons/comment.png');
 const heart_fill_icon = require('../../assets/icons/comment-heart-fill.png');
 const heart_icon = require('../../assets/icons/comment-heart-outline.png');
+const defaultProfileImage = require('../../assets/images/blank_profile.png'); //댓글 이미지가 없음.
 
 
 export const CommentItem = ({ profileImg, nickname, comment, likeNum, replyNum, date }) => {
@@ -26,7 +27,7 @@ export const CommentItem = ({ profileImg, nickname, comment, likeNum, replyNum, 
                 <TouchableOpacity 
                 style={{flexDirection: 'row', gap:10, alignItems: 'center'}} 
                 onPress={()=>goToUserProfile()}>
-                    <Image source={{ uri: profileImg }} style={{ width: 28, height: 28, borderRadius: 15 }} />
+                    <Image source={ defaultProfileImage } style={{ width: 28, height: 28, borderRadius: 15 }} />
                     <Text style={styles.cmnt_Author}>{nickname}</Text>
                 </TouchableOpacity>
                 <Text style={styles.cmnt_Date}>{date}</Text>
