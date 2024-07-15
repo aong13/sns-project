@@ -5,13 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Splash from './pages/Splash';
 import Home from './pages/mainTab/Home';
 import Search from './pages/mainTab/Search';
-import Dm from './pages/mainTab/Dm';
 import MyPage from './pages/mainTab/MyPage';
 import Add from './pages/mainTab/Add';
 
 import FeedDetail from './pages/FeedDetail';
 import SearchList from './pages/SearchList';
 import AddFeed from './pages/AddFeed'; 
+import FollowPage from './pages/FollowPage'; 
+import MyInfo from './pages/MyInfo'; 
 
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -33,7 +34,6 @@ const MainTab = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Add" component={Add} />
-      <Tab.Screen name="Dm" component={Dm} />
       <Tab.Screen name="MyPage" component={MyPage} />
     </Tab.Navigator>
   );
@@ -50,6 +50,8 @@ const Router = () => {
       <Stack.Screen name="FeedDetail" component={FeedDetail} />
       <Stack.Screen name="SearchList" component={SearchList} />
       <Stack.Screen name="AddFeed" component={AddFeed} /> 
+      <Stack.Screen name="FollowPage" component={FollowPage} /> 
+      <Stack.Screen name="MyInfo" component={MyInfo} /> 
       <Stack.Screen name="LoginPage" component={LoginPage} />
       <Stack.Screen name="SignupPage" component={SignupPage} />
       <Stack.Screen name="MainTab" component={MainTab} />
