@@ -37,19 +37,23 @@ const FollowPage = ({ navigation }) => {
     const [searchEmail, setSearchEmail] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const followUser = async (email) => {
-        console.log(email);
-        try {
-            const res = await postFollow(email);
-            console.log('팔로우 성공:', res);
-            setIsModalVisible(false);
-        } catch (error) {
-            console.error('팔로우 실패함:', error);
-            setIsModalVisible(false);
-            // 에러 처리
+    const [errorMessage, setErrorMessage] = useState("");
+
+
+const followUser = async (email) => {
+    try {
+        const res = await postFollow(email);
+        console.log('팔로우 성공:', res);
+        setIsModalVisible(false);
+    } catch (error) {
+        console.error('팔로우 실패함:', error);
+        if (error.message === "Property 'postFollow' doesn't exist") {
+            setErrorMessage("해당 사용자는 존재하지 않습니다.");
+        } else {
+            setErrorMessage("에러가 발생했습니다.");
         }
-    };
-    
+    }
+};
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
             <View style={styles.headerWrapper}>
@@ -92,13 +96,14 @@ const FollowPage = ({ navigation }) => {
             {isModalVisible && (
                 <AlertModal
                     isVisible={isModalVisible}
-                    okText="예"
-                    noText="아니오"
-                    headerTitle={`${searchEmail}님을 정말 팔로우하시겠습니까?`}
-                    onPressOk={() => followUser(searchEmail)}
+                    okText="확인"
+                    noText="닫기"
+                    headerTitle={errorMessage || `${searchEmail}님을 정말 팔로우하시겠습니까?`}
+                    onPressOk={errorMessage ? () => setIsModalVisible(false) : () => followUser(searchEmail)}
                     onPressNo={() => setIsModalVisible(false)}
                 />
             )}
+
         </SafeAreaView>
     );
 };
