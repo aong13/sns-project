@@ -39,6 +39,10 @@ const Search = ({ navigation }) => {
     };
     
     useEffect(() => {
+            getSearchTagApi("all", page, pageSize);
+    }, []); //처음엔 전부다불러오기
+
+    useEffect(() => {
         if (page > 0) {
             getSearchTagApi(searchTag, page, pageSize);
         }
@@ -53,9 +57,14 @@ const Search = ({ navigation }) => {
         getSearchTagApi(searchTag, 0, pageSize);
     };
 
+    const handleFeedPress = (id) => {
+        navigation.navigate('FeedDetail', { id }); // id전달
+    };
+
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={{ borderWidth: 1, borderColor: '#FFF' }}>
+            <TouchableOpacity style={{ borderWidth: 1, borderColor: '#FFF' }}
+                onPress={()=>handleFeedPress(item.id)}>
                 {item.images.length > 1 && <Image source={multiPhoto} style={{ position: 'absolute', right: 8, top: 8, width: 24, height: 24, zIndex: 4 }} />}
                 <Image source={{ uri: baseURL + item.images[0] }} style={{ width: (width / 3) - 2, height: (width / 3) - 2 }} />
             </TouchableOpacity>
