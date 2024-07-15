@@ -39,7 +39,9 @@ const Search = ({ navigation }) => {
     };
     
     useEffect(() => {
-        getSearchTagApi(searchTag, page, pageSize);
+        if (page > 0) {
+            getSearchTagApi(searchTag, page, pageSize);
+        }
     }, [page]);//page번호 바뀌면 검색api 호출
 
     const handleSearch = () => {
