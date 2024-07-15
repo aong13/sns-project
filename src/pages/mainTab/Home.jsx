@@ -4,59 +4,10 @@ import { getFeed } from '../../apis/Feed';
 import FeedPost from '../../components/FeedPost';
 import { baseURL } from '../../apis/index'
 
-
 const { width } = Dimensions.get('window');
 
-// const dummy_feed = [
-//     {
-//         id: 1,
-//         name: 'Jeongtaeyoung_5812',
-//         profileImg: 'https://avatar.iran.liara.run/public',
-//         feedImg: [
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//         ],
-//         contents: '내 마음...받아줘',
-//         like: 37,
-//         likeUsers: [
-//             1, 2, 3,
-//         ]
-//     },
-//     {
-//         id: 2,
-//         name: 'Jeongtaeyoung_5812',
-//         profileImg: 'https://avatar.iran.liara.run/public',
-//         feedImg: [
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//         ],
-//         contents: '내 마음...받아줘',
-//         like: 37,
-//         likeUsers: [
-//             1, 2, 3,
-//         ]
-//     },
-//     {
-//         id: 3,
-//         name: 'Jeongtaeyoung_5812',
-//         profileImg: 'https://avatar.iran.liara.run/public',
-//         feedImg: [
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//             'https://picsum.photos/400/400',
-//         ],
-//         contents: '하이룽룽닝닝',
-//         like: 37,
-//         likeUsers: [
-//             1, 2, 3,
-//         ]
-//     }
-// ]
+const defaultProfileImage = require('../../assets/images/blank_profile.png')
+
 
 const Home = ({ navigation }) => {
     const [feedData, setFeedData] = useState([]);
@@ -75,11 +26,10 @@ const Home = ({ navigation }) => {
     }, [page]);
 
     const renderFeed = ({ item }) => {
-        console.log("item:", item);
         return (
             <FeedPost 
                 id={item.id}
-                profileImg={baseURL+ item.images[0]} //프로필 이미지가 없음
+                profileImg={item.profileImagePath} 
                 nickname={item.nickname}
                 likeNum={item.like=2}
                 commentNum={item.replys.length}
@@ -89,7 +39,6 @@ const Home = ({ navigation }) => {
             />
         );
     };
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
             <View style={styles.headerWrapper}>
