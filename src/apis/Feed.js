@@ -7,7 +7,7 @@ export const getFeed = async (page, pageSize) => {
           params: {
             page,
             pageSize,
-      },
+       },
       });
       return res.data.result;
   } catch (error) {
@@ -15,6 +15,20 @@ export const getFeed = async (page, pageSize) => {
       throw error;
   }
 };
+
+export const getFeedDetail = async (feedId) => {
+  try {
+      const res = await API.get(`/feed/${feedId}`, {
+          params: { feedId }
+      });
+      console.log('FeedDetail 조회 :', res); 
+      return res.data.result;
+  } catch (error) {
+      console.error('FeedDetail 조회 실패:', error.res); 
+      throw error;
+  }
+};
+
 
 export const getSearchTag = async (searchTag, page, pageSize) => {
   try {

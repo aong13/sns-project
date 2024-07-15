@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 import { CommentItem } from '../components/Comment/CommentItem';
 import HashTags from '../components/HashTags';
-
+import { getFeedDetail } from '../apis/Feed';
+import { baseURL } from '../apis';
 const { width } = Dimensions.get('window');
 
 const more_icon = require('../assets/icons/more.png')
@@ -26,29 +27,30 @@ const good_icon = require('../assets/icons/emotion_good.png');
 const sad_icon = require('../assets/icons/emotion_angry.png');
 const surprise_icon = require('../assets/icons/emotion_angry.png');
 
+const defaultProfileImage = require('../assets/images/blank_profile.png')
 
-const dummy_feed = {
-        id: 1,
-        name: 'Jeongtaeyoung_5812',
-        profileImg: 'https://avatar.iran.liara.run/public',
-        feedImg: [
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-            'https://picsum.photos/400/400',
-        ],
-        contents: '내 마음...받아줘',
-        like: 37,
-        likeUsers: [
-            1, 2, 3,
-        ],
-        hashTags:[
-            '스포츠',
-            '맥북',
-            '코딩중',
-            '리액트네이티브'
-        ]
-    }
+// const dummy_feed = {
+//         id: 1,
+//         name: 'Jeongtaeyoung_5812',
+//         profileImg: 'https://avatar.iran.liara.run/public',
+//         feedImg: [
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//             'https://picsum.photos/400/400',
+//         ],
+//         contents: '내 마음...받아줘',
+//         like: 37,
+//         likeUsers: [
+//             1, 2, 3,
+//         ],
+//         hashTags:[
+//             '스포츠',
+//             '맥북',
+//             '코딩중',
+//             '리액트네이티브'
+//         ]
+//     }
 const dummyComment = [{
     id:1,
     nickname: 'Jeongtaeyoung_5812',
@@ -79,10 +81,21 @@ const dummyComment = [{
 
 const FeedDetail = ({ route, navigation }) => {
     const { id } = route.params;
+    const [feedDetail, setFeedDetail] = useState([]);
+
+    const getFeedDetailApi = async ({id}) => {
+        const feedDetail = await getFeedDetail(id);
+        console.log('feedDetail:', feedDetail);
+        console.log('test: ', baseURL + feedDetail.images[0])
+        setFeedDetail(feedDetail);
+    };
+    useEffect(() => {
+        getFeedDetailApi({id});
+    }, []);
 
     const renderItem = ({ item }) => (
         <CommentItem
-            profileImg={item.profileImg}
+            profileImg={ item.profileImg}
             nickname={item.nickname}
             comment={item.comment}
             likeNum={item.likeNum}
@@ -94,6 +107,10 @@ const FeedDetail = ({ route, navigation }) => {
     const handleLikePress = () => {
 
     }
+
+    //프로필이미지 없는경우 처리
+    const profileImageUrl = feedDetail.profileImagePath ? { uri: baseURL + feedDetail.profileImagePath } : defaultProfileImage;
+    const ImageUrl = feedDetail.images ? { uri: baseURL + feedDetail.images[0] } : defaultProfileImage;
   return (
     <SafeAreaView style={{flex:1, backgroundColor:'#FFF'}}>
             <View style={styles.headerWrapper}>
@@ -115,10 +132,10 @@ const FeedDetail = ({ route, navigation }) => {
             <View style={styles.postHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                     <TouchableOpacity>
-                        <Image source={{uri: dummy_feed.profileImg}} style={{ width: 32, height: 32 }} />
+                        <Image source={profileImageUrl} style={{ width: 32, height: 32 }} />
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <Text style={styles.nicknameText}>{dummy_feed.name}</Text>
+                        <Text style={styles.nicknameText}>{feedDetail.nickname}</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity>
@@ -128,16 +145,15 @@ const FeedDetail = ({ route, navigation }) => {
 
             {/** 캐러셀로 구현해보기 */}
             <Image 
-                source={{ uri: dummy_feed.feedImg[0] }}
+                source={ImageUrl} 
                 style={styles.thumbnailImg}
                 resizeMode='contain' />
 
             <View style={styles.contentContainer}>
                 <Text styles={styles.timeText}> 30분 전 </Text>
-                <Text style={styles.contentsText}>{dummy_feed.contents}</Text>
-                
+                <Text style={styles.contentsText}>{feedDetail.content}</Text>
             <HashTags
-                tagList={dummy_feed.hashTags}/>
+                tagList={feedDetail.tags}/>
             </View>
 
             <View style={styles.reactionsContainer}>
@@ -151,7 +167,7 @@ const FeedDetail = ({ route, navigation }) => {
             </View>
 
             <FlatList
-                data={dummyComment}
+                data={feedDetail}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
@@ -181,15 +197,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#EAEAEA'
     },
-        headerButtonsWrapper:{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 4 
-        },
-        headerIcon:{
-            width: 28,
-             height: 28
-        },
+    headerButtonsWrapper:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4 
+    },
+    headerIcon:{
+        width: 28,
+            height: 28
+    },
     //글 상단
     postHeader:{
         flexDirection: 'row',

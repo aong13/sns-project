@@ -12,7 +12,7 @@ const HashTagComponent = ({ hashTag, onDelete }) => (
 
 const HashTags = ({ tagList, onDelete }) => (
   <View style={styles.hashTagContainer}>
-    {tagList.map((hashTag, index) => (
+    {tagList && tagList.map((hashTag, index) => (
       <HashTagComponent key={index} hashTag={hashTag} onDelete={onDelete} />
     ))}
   </View>
