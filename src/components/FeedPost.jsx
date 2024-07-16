@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Dimensions, View, TouchableOpacity, Image, Text, StyleSheet } from 'react-native';
 import { baseURL } from '../apis/index';
+import { getEmotionIcon } from '../utils/utils';
 
 const more_icon = require('../assets/icons/more.png');
 const heart_fill_icon = require('../assets/icons/heart-fill.png');
@@ -11,7 +12,7 @@ const { width } = Dimensions.get('window');
 
 const defaultProfileImage = require('../assets/images/blank_profile.png');
 
-const FeedPost = ({ id, profileImg, nickname, likeNum, commentNum, thumbnail, contents, navigation }) => {
+const FeedPost = ({ id, profileImg, nickname, myEmotion, emotionNum, commentNum, thumbnail, contents, navigation }) => {
     const [isLiked, setIsLiked] = useState(false);
 
     const goToUserProfile = () => {
@@ -30,16 +31,12 @@ const FeedPost = ({ id, profileImg, nickname, likeNum, commentNum, thumbnail, co
 
     // 프로필 이미지 없는 경우 처리
     const profileImageUrl = profileImg ? { uri: baseURL + profileImg } : defaultProfileImage;
-
-    console.log("props:", profileImg); // profileImg의 값 확인
-    console.log("img", profileImageUrl); // profileImageUrl의 값 확인
-
     return (
         <View style={styles.postContainer}>
             <View style={styles.postHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                     <TouchableOpacity>
-                        <Image source={profileImageUrl} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                        <Image source={profileImageUrl} style={styles.profileImg} />
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Text style={styles.nicknameText}>{nickname}</Text>
@@ -63,11 +60,11 @@ const FeedPost = ({ id, profileImg, nickname, likeNum, commentNum, thumbnail, co
                 <View style={styles.reactionWrapper}>
                     <TouchableOpacity
                         onPress={() => handleLikePress()}>
-                        <Image source={isLiked ? heart_fill_icon : heart_icon} style={{ width: 24, height: 24 }} />
+                        <Image source={getEmotionIcon(myEmotion)} style={{ width: 24, height: 24 }} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => handleCommentPress()}>
-                        <Text>{likeNum}</Text>
+                        <Text>{emotionNum}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.reactionWrapper}>
@@ -103,6 +100,11 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         lineHeight: 20.27,
         color: '#3A3A3A'
+    },
+    profileImg:{
+        width: 32,
+        height: 32,
+        borderRadius: 16
     },
     thumbnailImg: {
         width: width - 24,

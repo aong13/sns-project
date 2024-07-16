@@ -7,6 +7,7 @@ import HashTags from '../components/HashTags';
 import EmotionSelector from '../components/EmotionSelector'
 import { getFeedDetail, postReply, postEmotion } from '../apis/Feed';
 import { baseURL } from '../apis';
+import { getEmotionIcon } from '../utils/utils';
 const { width } = Dimensions.get('window');
 
 const more_icon = require('../assets/icons/more.png')
@@ -25,25 +26,7 @@ const comment_icon = require('../assets/icons/comment.png');
 const heart_fill_icon = require('../assets/icons/comment-heart-fill.png');
 const heart_icon = require('../assets/icons/comment-heart-outline.png');
 
-const defaultProfileImage = require('../assets/images/blank_profile.png')
-
-
-export const getEmotionIcon = (emotionType) => {
-    switch (emotionType) {
-        case 'ANGRY':
-            return require('../assets/icons/emotion_angry.png');
-        case 'FUNNY':
-            return require('../assets/icons/emotion_funny.png');
-        case 'GOOD':
-            return require('../assets/icons/emotion_good.png');
-        case 'SAD':
-            return require('../assets/icons/emotion_sad.png');
-        case 'SURPRISE':
-            return require('../assets/icons/emotion_surprise.png');
-        default:
-            return require('../assets/icons/expression-outline.png');
-    }
-};
+const defaultProfileImage = require('../assets/images/blank_profile.png');
 
 const FeedDetail = ({ route, navigation }) => {
     const { id } = route.params;
