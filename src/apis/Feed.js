@@ -21,7 +21,7 @@ export const getFeedDetail = async (feedId) => {
       const res = await API.get(`/feed/${feedId}`, {
           params: { feedId }
       });
-      console.log('FeedDetail 조회 :', res); 
+      console.log('FeedDetail 조회 :', res.data.result); 
       return res.data.result;
   } catch (error) {
       console.error('FeedDetail 조회 실패:', error.res); 
@@ -39,7 +39,7 @@ export const getSearchTag = async (searchTag, page, pageSize) => {
               pageSize,
           },
       });
-      return res.data;
+      return res.data.result;
   } catch (error) {
       console.error('태그 검색 실패:', error.response);
       throw error;
@@ -71,5 +71,15 @@ export const createFeed = async (content, tags, images) => {
   } catch (error) {
       console.error('피드 작성 실패:', error.response);
       throw error;
+  }
+};
+
+export const createReply = async (feedId, reply) => {
+  try {
+    const res = await API.post(`/feed/${feedId}/reply`, {reply});
+    return res.data;
+  } catch (error) {
+    console.error('댓글 작성 실패:', error.response);
+    throw error;
   }
 };

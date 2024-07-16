@@ -4,7 +4,7 @@ import { Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity
 import { CommentItem } from '../components/Comment/CommentItem';
 import BasicHeader from '../components/BasicHeader';
 import HashTags from '../components/HashTags';
-import { getFeedDetail } from '../apis/Feed';
+import { getFeedDetail, createReply } from '../apis/Feed';
 import { baseURL } from '../apis';
 const { width } = Dimensions.get('window');
 
@@ -43,44 +43,53 @@ const FeedDetail = ({ route, navigation }) => {
         setReplys(feedDetail.replys)
         setFeedDetail(feedDetail);
     };
+    const createReplyApi = async({feedId, reply}) => {
+        const res = await createReply(feedId, reply);
+        console.log("댓글 작성 성공:", res)
+        getFeedDetailApi({id})
+    }
 
     useEffect(() => {
         getFeedDetailApi({id});
     }, []);
-
-    const renderReply = ({ item }) => (
-        <CommentItem
-            // profileImg={defaultProfileImage}
-            nickname={item.nickname}
-            comment={item.reply}
-            likeNum={item.likeNum || 0} // 임시
-            replyNum={item.replyNum || 0} // 임시
-            date={item.date}
-        />
-    );
-
-    const renderCarousel = ({ item, index }) => {
-        console.log("renderCarousel: ", item);
-        return (
-            <Image
-                source={{ uri: baseURL + item }}
-                style={styles.thumbnailImg}
-                resizeMode="contain"
-            />
-        );
-    };
-
+    
     const handleLikePress = () => {
     };
-
     const handleReplySubmit = () => {
+        console.log("전송된것:",{id, replyValue});
+        createReplyApi({ feedId: id, reply: replyValue })
+        setReplyValue("");
     };
-
+    
+        const renderReply = ({ item }) => (
+            <CommentItem
+                // profileImg={defaultProfileImage}
+                nickname={item.nickname}
+                comment={item.reply}
+                likeNum={item.likeNum || 0} // 임시
+                replyNum={item.replyNum || 0} // 임시
+                date={item.date}
+            />
+        );
+    
+        const renderCarousel = ({ item, index }) => {
+            console.log("renderCarousel: ", item);
+            return (
+                <Image
+                    source={{ uri: baseURL + item }}
+                    style={styles.thumbnailImg}
+                    resizeMode="contain"
+                />
+            );
+        };
+    
+    //이미지처리(default, baseurL)
     const profileImageUrl = feedDetail.profileImagePath ? { uri: baseURL + feedDetail?.profileImagePath } : defaultProfileImage;
     const ImageUrl = feedDetail.images ? { uri: baseURL + feedDetail?.images[0] } : "";
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF', paddingBottom: 66 }}>
+           
             <BasicHeader
                 rightButtons={[
                     { icon: share_icon },
@@ -157,6 +166,7 @@ const FeedDetail = ({ route, navigation }) => {
             </View>
         </SafeAreaView>
     );
+
 };
 
 const ReactionButton = ({ onPress, text, img }) => (
