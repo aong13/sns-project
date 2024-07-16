@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { postEmotion } from '../apis/Feed';
 
 const angry_icon = require('../assets/icons/emotion_angry.png');
 const funny_icon = require('../assets/icons/emotion_funny.png');
@@ -8,6 +9,7 @@ const sad_icon = require('../assets/icons/emotion_sad.png');
 const surprise_icon = require('../assets/icons/emotion_surprise.png');
 
 const EmotionSelector = ({ isVisible, onSelectEmotion, onClose }) => {
+
     return (
         <Modal
             animationType="slide"
@@ -17,19 +19,19 @@ const EmotionSelector = ({ isVisible, onSelectEmotion, onClose }) => {
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <TouchableOpacity onPress={() => onSelectEmotion('angry')}>
+                    <TouchableOpacity onPress={() => onSelectEmotion('ANGRY')}>
                         <Image source={angry_icon} style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => onSelectEmotion('funny')}>
+                    <TouchableOpacity onPress={() => onSelectEmotion('FUNNY')}>
                         <Image source={funny_icon} style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => onSelectEmotion('good')}>
+                    <TouchableOpacity onPress={() => onSelectEmotion('GOOD')}>
                         <Image source={good_icon} style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => onSelectEmotion('sad')}>
+                    <TouchableOpacity onPress={() => onSelectEmotion('SAD')}>
                         <Image source={sad_icon} style={styles.img} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => onSelectEmotion('surprise')}>
+                    <TouchableOpacity onPress={() => onSelectEmotion('SURPRISE')}>
                         <Image source={surprise_icon} style={styles.img} />
                     </TouchableOpacity>
                 </View>

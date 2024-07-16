@@ -18,9 +18,7 @@ export const getFeed = async (page, pageSize) => {
 
 export const getFeedDetail = async (feedId) => {
   try {
-      const res = await API.get(`/feed/${feedId}`, {
-          params: { feedId }
-      });
+      const res = await API.get(`/feed/${feedId}`);
       console.log('FeedDetail 조회 :', res.data.result); 
       return res.data.result;
   } catch (error) {
@@ -74,12 +72,23 @@ export const createFeed = async (content, tags, images) => {
   }
 };
 
-export const createReply = async (feedId, reply) => {
+export const postReply = async (feedId, reply) => {
   try {
     const res = await API.post(`/feed/${feedId}/reply`, {reply});
+    console.error('댓글 작성 성공:', res.data);
     return res.data;
   } catch (error) {
     console.error('댓글 작성 실패:', error.response);
+    throw error;
+  }
+};
+
+export const postEmotion = async (feedId, emotionType) => {
+  try {
+    const res = await API.post(`/feed/${feedId}/emotion?emotionType=${emotionType}`);
+    return res.data;
+  } catch (error) {
+    console.error('emotion 추가 실패:', error.response);
     throw error;
   }
 };

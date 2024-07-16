@@ -5,7 +5,7 @@ import { CommentItem } from '../components/Comment/CommentItem';
 import BasicHeader from '../components/BasicHeader';
 import HashTags from '../components/HashTags';
 import EmotionSelector from '../components/EmotionSelector'
-import { getFeedDetail, createReply } from '../apis/Feed';
+import { getFeedDetail, postReply, postEmotion } from '../apis/Feed';
 import { baseURL } from '../apis';
 const { width } = Dimensions.get('window');
 
@@ -40,35 +40,43 @@ const FeedDetail = ({ route, navigation }) => {
     const [replyValue, setReplyValue] = useState('');
     const [showEmotionSelector, setShowEmotionSelector] = useState(false); 
     const emotionBtnRef = useRef(null);
-    const [emotionBtnPosition, setEmotionBtnPosition] = useState();
+    //const [emotionBtnPosition, setEmotionBtnPosition] = useState();
 
+    //API 호출 함수
     const getFeedDetailApi = async ({id}) => {
         const feedDetail = await getFeedDetail(id);
         setReplys(feedDetail.replys)
         setFeedDetail(feedDetail);
     };
-    const createReplyApi = async({feedId, reply}) => {
-        const res = await createReply(feedId, reply);
+    const addReplyApi = async({feedId, reply}) => {
+        const res = await postReply(feedId, reply);
         console.log("댓글 작성 성공:", res)
         getFeedDetailApi({id})
-    }
+    };
+    const addEmotionApi = async({feedId, emotion}) => {
+        const res = await postEmotion(feedId, emotion);
+        console.log("감정 추가 성공:", res)
+        getFeedDetailApi({id})
+    };
 
     useEffect(() => {
         getFeedDetailApi({id});
     }, []);
-    
+
     const handleEmotionBtnPress = () => {
-        setEmotionBtnPosition(emotionBtnRef.current);
-        console.log(emotionBtnPosition)
+        // setEmotionBtnPosition(emotionBtnRef.current);
+        // console.log(emotionBtnPosition)
         setShowEmotionSelector(true);
     };
+    
     const handleEmotionSelect = (emotion) => {
+        addEmotionApi({ feedId: id, emotion: emotion})
         console.log('Selected emotion:', emotion);
         setShowEmotionSelector(false); 
     };
 
     const handleReplySubmit = () => {
-        createReplyApi({ feedId: id, reply: replyValue })
+        addReplyApi({ feedId: id, reply: replyValue })
         setReplyValue("");
     };
     
