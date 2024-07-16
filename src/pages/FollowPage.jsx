@@ -85,7 +85,7 @@ const FollowPage = ({ navigation }) => {
             const res = await getFollowingList();
             console.log('팔로잉 불러오기 성공:', res);
             setFollowingList(res);
-            setFollowingCount(res.following.length);
+            setFollowingCount(res.length);
         } catch (error) {
             console.error('팔로잉 불러오기 실패:', error);
             // 에러 처리 코드 추가
