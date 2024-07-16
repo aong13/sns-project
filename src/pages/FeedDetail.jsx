@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dimensions, SafeAreaView, View, Text, Image, FlatList, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView, StyleSheet } from 'react-native';
 // import Carousel from 'react-native-snap-carousel';
 import { CommentItem } from '../components/Comment/CommentItem';
 import BasicHeader from '../components/BasicHeader';
 import HashTags from '../components/HashTags';
+import EmotionSelector from '../components/EmotionSelector'
 import { getFeedDetail, createReply } from '../apis/Feed';
 import { baseURL } from '../apis';
 const { width } = Dimensions.get('window');
@@ -37,6 +38,9 @@ const FeedDetail = ({ route, navigation }) => {
     const [feedDetail, setFeedDetail] = useState([]);
     const [replys, setReplys] = useState([]);
     const [replyValue, setReplyValue] = useState('');
+    const [showEmotionSelector, setShowEmotionSelector] = useState(false); 
+    const emotionBtnRef = useRef(null);
+    const [emotionBtnPosition, setEmotionBtnPosition] = useState();
 
     const getFeedDetailApi = async ({id}) => {
         const feedDetail = await getFeedDetail(id);
@@ -53,17 +57,24 @@ const FeedDetail = ({ route, navigation }) => {
         getFeedDetailApi({id});
     }, []);
     
-    const handleLikePress = () => {
+    const handleEmotionBtnPress = () => {
+        setEmotionBtnPosition(emotionBtnRef.current);
+        console.log(emotionBtnPosition)
+        setShowEmotionSelector(true);
     };
+    const handleEmotionSelect = (emotion) => {
+        console.log('Selected emotion:', emotion);
+        setShowEmotionSelector(false); 
+    };
+
     const handleReplySubmit = () => {
-        console.log("전송된것:",{id, replyValue});
         createReplyApi({ feedId: id, reply: replyValue })
         setReplyValue("");
     };
     
         const renderReply = ({ item }) => (
             <CommentItem
-                // profileImg={defaultProfileImage}
+                // profileImg={defaultProfileImage} //이미지 없음
                 nickname={item.nickname}
                 comment={item.reply}
                 likeNum={item.likeNum || 0} // 임시
@@ -133,8 +144,14 @@ const FeedDetail = ({ route, navigation }) => {
                             <HashTags tagList={feedDetail.tags} />
                         </View>
 
+                        <EmotionSelector
+                            ref={emotionBtnRef}
+                            isVisible={showEmotionSelector}
+                            onSelectEmotion={handleEmotionSelect}
+                            onClose={() => setShowEmotionSelector(false)}
+                        />
                         <View style={styles.reactionsContainer}>
-                            <ReactionButton onPress={handleLikePress} text="표현하기" img={emotion_icon} />
+                            <ReactionButton onPress={handleEmotionBtnPress} text="표현하기" img={emotion_icon} />
                             <ReactionButton text="댓글" img={comment_icon} />
                         </View>
 
