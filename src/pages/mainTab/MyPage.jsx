@@ -32,14 +32,21 @@ const Mypage = ({ navigation }) => {
         // console.log("item in mypage:", item)
         return (
             <TouchableOpacity 
+                onPress={()=>handleFeedPress(item.id)}
                 style={{borderWidth: 1, borderColor: '#FFF'}}>
                 { item.images.length > 1  && <Image source={multiPhoto} style={{position: 'absolute', right: 8, top: 8, width: 24, height: 24, zIndex: 4 }} />}
                 <Image source={{ uri: baseURL + item.images[0]}} style={{width:(width/3) -2, height: (width/3) - 2}} />
             </TouchableOpacity>
         )
     }
+
+    
+    const handleFeedPress = (id) => {
+        navigation.navigate('FeedDetail', { id }); // id전달
+    };
+
     //프로필이미지 없는경우 처리
-    const profileImageUrl = accountInfo.profileImg ? { uri: baseURL + accountInfo.profileImg } : defaultProfileImage;
+    const profileImageUrl = accountInfo.profileImagePath ? { uri: baseURL + accountInfo.profileImagePath } : defaultProfileImage;
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
@@ -65,19 +72,18 @@ const Mypage = ({ navigation }) => {
                             onPress={() => navigation.navigate('FollowPage')}
                             style={{alignItems:'center', gap: 2}}>
                             <Text style={{fontSize: 12}}>{accountInfo.followerCount}</Text>
-                            <Text style={{fontSize: 13}}>팔로잉</Text>
+                            <Text style={{fontSize: 13}}>팔로워</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{alignItems:'center', gap: 2}}
                             onPress={() => navigation.navigate('FollowPage')}>
                             <Text style={{fontSize: 12}}>{accountInfo.followingCount}</Text>
-                            <Text style={{fontSize: 13}}>팔로워</Text>
+                            <Text style={{fontSize: 13}}>팔로잉</Text>
                         </TouchableOpacity>
                     </View>
 
                 </View>
                 <FlatList 
                     data={feedList}
-                    // data={duumy_search}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
