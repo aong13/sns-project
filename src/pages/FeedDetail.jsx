@@ -25,17 +25,30 @@ const comment_icon = require('../assets/icons/comment.png');
 const heart_fill_icon = require('../assets/icons/comment-heart-fill.png');
 const heart_icon = require('../assets/icons/comment-heart-outline.png');
 
-const angry_icon = require('../assets/icons/emotion_angry.png');
-const funny_icon = require('../assets/icons/emotion_funny.png');
-const good_icon = require('../assets/icons/emotion_good.png');
-const sad_icon = require('../assets/icons/emotion_angry.png');
-const surprise_icon = require('../assets/icons/emotion_angry.png');
-
 const defaultProfileImage = require('../assets/images/blank_profile.png')
+
+
+export const getEmotionIcon = (emotionType) => {
+    switch (emotionType) {
+        case 'ANGRY':
+            return require('../assets/icons/emotion_angry.png');
+        case 'FUNNY':
+            return require('../assets/icons/emotion_funny.png');
+        case 'GOOD':
+            return require('../assets/icons/emotion_good.png');
+        case 'SAD':
+            return require('../assets/icons/emotion_sad.png');
+        case 'SURPRISE':
+            return require('../assets/icons/emotion_surprise.png');
+        default:
+            return require('../assets/icons/expression-outline.png');
+    }
+};
 
 const FeedDetail = ({ route, navigation }) => {
     const { id } = route.params;
     const [feedDetail, setFeedDetail] = useState([]);
+    const [emotions, setEmotions] = useState([]);
     const [replys, setReplys] = useState([]);
     const [replyValue, setReplyValue] = useState('');
     const [showEmotionSelector, setShowEmotionSelector] = useState(false); 
@@ -47,6 +60,7 @@ const FeedDetail = ({ route, navigation }) => {
         const feedDetail = await getFeedDetail(id);
         setReplys(feedDetail.replys)
         setFeedDetail(feedDetail);
+        setEmotions(feedDetail.emotions);
     };
     const addReplyApi = async({feedId, reply}) => {
         const res = await postReply(feedId, reply);
@@ -59,48 +73,51 @@ const FeedDetail = ({ route, navigation }) => {
         getFeedDetailApi({id})
     };
 
+    //첫 렌더링
     useEffect(() => {
         getFeedDetailApi({id});
     }, []);
 
+
+    //감정선택
     const handleEmotionBtnPress = () => {
         // setEmotionBtnPosition(emotionBtnRef.current);
         // console.log(emotionBtnPosition)
         setShowEmotionSelector(true);
     };
-    
     const handleEmotionSelect = (emotion) => {
         addEmotionApi({ feedId: id, emotion: emotion})
-        console.log('Selected emotion:', emotion);
         setShowEmotionSelector(false); 
     };
 
+    //댓글업로드/렌더링
     const handleReplySubmit = () => {
         addReplyApi({ feedId: id, reply: replyValue })
         setReplyValue("");
     };
     
-        const renderReply = ({ item }) => (
-            <CommentItem
-                // profileImg={defaultProfileImage} //이미지 없음
-                nickname={item.nickname}
-                comment={item.reply}
-                likeNum={item.likeNum || 0} // 임시
-                replyNum={item.replyNum || 0} // 임시
-                date={item.date}
+    const renderReply = ({ item }) => (
+        <CommentItem
+            // profileImg={defaultProfileImage} //이미지 없음
+            nickname={item.nickname}
+            comment={item.reply}
+            likeNum={item.likeNum || 0} // 임시
+            replyNum={item.replyNum || 0} // 임시
+            date={item.date}
+        />
+    );
+    
+    //캐러셀 미구현 
+    const renderCarousel = ({ item, index }) => {
+        console.log("renderCarousel: ", item);
+        return (
+            <Image
+                source={{ uri: baseURL + item }}
+                style={styles.thumbnailImg}
+                resizeMode="contain"
             />
         );
-    
-        const renderCarousel = ({ item, index }) => {
-            console.log("renderCarousel: ", item);
-            return (
-                <Image
-                    source={{ uri: baseURL + item }}
-                    style={styles.thumbnailImg}
-                    resizeMode="contain"
-                />
-            );
-        };
+    };
     
     //이미지처리(default, baseurL)
     const profileImageUrl = feedDetail.profileImagePath ? { uri: baseURL + feedDetail?.profileImagePath } : defaultProfileImage;
@@ -110,10 +127,7 @@ const FeedDetail = ({ route, navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF', paddingBottom: 66 }}>
            
             <BasicHeader
-                rightButtons={[
-                    { icon: share_icon },
-                    { icon: scrab_icon },
-                ]}
+                rightButtons={[{ icon: share_icon },{ icon: scrab_icon }]}
             />
 
             <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
@@ -159,9 +173,11 @@ const FeedDetail = ({ route, navigation }) => {
                             onClose={() => setShowEmotionSelector(false)}
                         />
                         <View style={styles.reactionsContainer}>
-                            <ReactionButton onPress={handleEmotionBtnPress} text="표현하기" img={emotion_icon} />
+                            <ReactionButton onPress={handleEmotionBtnPress} text="표현하기" img={getEmotionIcon(emotions.emotionCheck)} />
                             <ReactionButton text="댓글" img={comment_icon} />
-                        </View>
+                            
+                            <FeeedEmotions emotions={emotions}/>
+                       </View>
 
                         <FlatList
                             data={replys}
@@ -202,6 +218,34 @@ const ReactionButton = ({ onPress, text, img }) => (
         <Text>{text}</Text>
     </TouchableOpacity>
 );
+
+// const dummy_emotion = [
+//     {type: 'SURPRISE', count:1},
+//     {type: 'GOOD', count:2},
+// ]
+const FeeedEmotions = ({ emotions }) => {
+
+    const emotionsArray = Object.entries(emotions)
+        .filter(([key, value]) => key !== 'total' && value > 0) // total 제외하고 count가 0 이상인 것만 필터링
+        .map(([key, value]) => ({ type: key.toUpperCase(), count: value })) // type을 대문자로 변환
+        .sort((a, b) => b.count - a.count) // count 기준으로 내림차순 정렬
+        .slice(0, 2); // 상위 두 개의 감정만 선택
+
+    console.log("이모션 확인", { emotions, emotionsArray });
+
+    return (
+        <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
+            <View style={styles.emotionContainer}>
+                {emotionsArray.map((emotion, index) => (
+                    <View key={index} style={{position: 'absolute',}}>
+                        <Image source={getEmotionIcon(emotion.type)} style={[styles.emotionIcon, { left: index * 12 }]}/>
+                    </View>
+                ))}
+            </View>
+            <Text> {emotions.total}</Text>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     // 글 상단
@@ -259,6 +303,19 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.2,
         borderColor: '#d0d0d0',
     },
+    //감정표현
+    emotionContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingRight: 30,
+        height: 16,
+    },
+    emotionIcon: {
+        width: 20,
+        height: 20,
+    },
+
     // 댓글
     replyWrapper: {
         position: 'absolute',
