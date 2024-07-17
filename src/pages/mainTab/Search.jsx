@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { getSearchTag } from '../../apis/Feed';
 import { baseURL } from '../../apis/index';
+import Loading from '../../components/Loading';
 
 const hashTagIcon = require('../../assets/icons/hashtag.png');
 const multiPhoto = require('../../assets/icons/multi.png');
@@ -15,7 +16,7 @@ const Search = ({ navigation }) => {
     const [hasMore, setHasMore] = useState(true); 
     const [searchTag, setSearchTag] = useState(""); 
 
-    const pageSize = 10; // 한 페이지당 불러올 데이터 개수
+    const pageSize = 20; // 한 페이지당 불러올 데이터 개수
 
     const getSearchTagApi = async (searchTag, page, pageSize) => {
         setLoading(true); 
@@ -99,7 +100,8 @@ const Search = ({ navigation }) => {
                     numColumns={3}
                     onEndReached={loadMoreResults} // 리스트 끝에 도달하면 loadMoreResults
                     onEndReachedThreshold={0.5} // 리스트 절반지점 onEndReached
-                    ListFooterComponent={loading && <Text>Loading...</Text>} //하단에 표시
+                    ListFooterComponent={loading && <Loading />} // 하단에 로딩 표시
+
                 />
             </View>
         </SafeAreaView>
