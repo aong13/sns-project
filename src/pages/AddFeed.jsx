@@ -23,8 +23,8 @@ const AddFeed = ({ navigation, route }) => {
             alert('피드가 성공적으로 업로드되었습니다.');
             navigation.goBack();
         } catch (error) {
-            console.log("addFeed.jsx에서 보내주는 uploadImag:", uploadingImage)
-            console.log("선택한 이미지:", selectedPhotos)
+            // console.log("addFeed.jsx에서 보내주는 uploadImag:", uploadingImage)
+            // console.log("선택한 이미지:", selectedPhotos)
             alert('피드 업로드에 실패했습니다.');
         }
     };

@@ -6,6 +6,7 @@ const Splash = ({ navigation }) => {
     useEffect(() => {
         const checkLoginStatus = async () => {
             const token = await AsyncStorage.getItem('authToken');
+            console.log(token);
             if (token) {
                 navigation.replace('MainTab');
             } else {
@@ -14,13 +15,14 @@ const Splash = ({ navigation }) => {
         };
 
         setTimeout(() => {
-            checkLoginStatus();
+            //checkLoginStatus();
+             navigation.replace('LoginPage');
         }, 2000);
-    }, [navigation]);
+    }, []);
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Splash</Text>
+            <Text>오운완</Text>
         </View>
     );
 };

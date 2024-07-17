@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000000', //ios그림자
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
-        shadowRadius: 2,
+        shadowRadius: 2, 
     },
     img: {
         width: 28,

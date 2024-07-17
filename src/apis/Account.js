@@ -11,3 +11,15 @@ export const getProfile = async () => {
       throw error;
   }
 };
+
+
+export const getMyInfo = async () => {
+  try {
+      const res = await API.get('/accounts/info/info');
+      return res.data.result;
+
+  } catch (error) {
+      console.error('내정보 조회 실패:', error.res); 
+      throw error;
+  }
+};
