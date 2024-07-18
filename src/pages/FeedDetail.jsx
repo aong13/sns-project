@@ -64,10 +64,9 @@ const FeedDetail = ({ route, navigation }) => {
 
     //감정선택
     const handleEmotionBtnPress = () => {
-        // setEmotionBtnPosition(emotionBtnRef.current);
-        // console.log(emotionBtnPosition)
         setShowEmotionSelector(true);
     };
+
     const handleEmotionSelect = (emotion) => {
         addEmotionApi({ feedId: id, emotion: emotion})
         setShowEmotionSelector(false); 

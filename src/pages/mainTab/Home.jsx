@@ -5,7 +5,6 @@ import BasicHeader from '../../components/BasicHeader';
 import { getFeed } from '../../apis/Feed';
 import FeedPost from '../../components/FeedPost';
 import { baseURL } from '../../apis/index';
-import Loading from '../../components/Loading';
 
 const Home = ({ navigation }) => {
     const [feedData, setFeedData] = useState([]);

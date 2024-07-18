@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dimensions, View, TouchableOpacity, Image, Text, StyleSheet } from 'react-native';
 import { baseURL } from '../apis/index';
 import { getEmotionIcon } from '../utils/utils';
+import EmotionSelector from './EmotionSelector';
 
 const more_icon = require('../assets/icons/more.png');
 const heart_fill_icon = require('../assets/icons/heart-fill.png');
@@ -18,10 +19,24 @@ const FeedPost = ({ id, profileImg, nickname, myEmotion, emotionNum, commentNum,
     const goToUserProfile = () => {
         // 댓글 작성자의 프로필로 이동
     };
-    const handleLikePress = () => {
-        // 좋아요 클릭시 좋아요 색 변경
-        setIsLiked(!isLiked);
+
+    const [showEmotionSelector, setShowEmotionSelector] = useState(false); 
+    //감정선택
+    const addEmotionApi = async({feedId, emotion}) => {
+        const res = await postEmotion(feedId, emotion);
+        console.log("감정 추가 성공:", res)
+        getFeedDetailApi({id})
     };
+
+    const handleEmotionBtnPress = () => {
+        setShowEmotionSelector(true);
+    };
+
+    const handleEmotionSelect = (emotion) => {
+        addEmotionApi({ feedId: id, emotion: emotion})
+        setShowEmotionSelector(false); 
+    };
+
     const handleImgPress = () => {
         navigation.navigate('FeedDetail', { id }); // home으로부터 받은 id 전달
     };
@@ -56,10 +71,17 @@ const FeedPost = ({ id, profileImg, nickname, myEmotion, emotionNum, commentNum,
                     resizeMode='contain' />
             </TouchableOpacity>
 
+            <EmotionSelector
+                // ref={emotionBtnRef}
+                isVisible={showEmotionSelector}
+                onSelectEmotion={handleEmotionSelect}
+                onClose={() => setShowEmotionSelector(false)}
+            />
+
             <View style={styles.reactionsContainer}>
                 <View style={styles.reactionWrapper}>
                     <TouchableOpacity
-                        onPress={() => handleLikePress()}>
+                        onPress={handleEmotionBtnPress}>
                         <Image source={getEmotionIcon(myEmotion)} style={{ width: 24, height: 24 }} />
                     </TouchableOpacity>
                     <TouchableOpacity
